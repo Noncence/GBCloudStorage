@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--    <context:component-scan base-package="ru.motrichkin.cloudstorage.server"/>-->
+
+    <bean id="server" class="gb.cloudstorage.server.Server">
+        <constructor-arg ref="databaseServer"/>
+        <constructor-arg ref="messageProcessor"/>
+    </bean>
+
+    <bean id="databaseServer" class="gb.cloudstorage.server.DatabaseServer">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="messageProcessor" class="gb.cloudstorage.server.MessageProcessor">
+        <constructor-arg ref="operatingFolder"/>
+        <constructor-arg ref="databaseServer"/>
+    </bean>
+
+    <bean id="operatingFolder" class="java.lang.String">
+        <constructor-arg value="server_storage/"/>
+    </bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="username" value=""/>
+        <property name="password" value=""/>
+        <property name="url" value="jdbc:h2:./main"/>
+    </bean>
+
+</beans>
